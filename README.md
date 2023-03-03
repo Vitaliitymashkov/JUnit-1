@@ -5,4 +5,4 @@ edu.tdd.junit.service.UserService#add
 The current implementation of this method works incorrect, but unit tests do not consider this.
 
 
-[Coverage report](CoverageReport/index.html)
+[Coverage report](/CoverageReport/index.html)
