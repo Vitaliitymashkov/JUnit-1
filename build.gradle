@@ -1,0 +1,69 @@
+plugins {
+    id 'java'
+}
+
+group 'edu.tdd'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation('org.junit.platform:junit-platform-launcher:1.9.2')
+    compileOnly 'org.projectlombok:lombok:1.18.26'
+    annotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testCompileOnly 'org.projectlombok:lombok:1.18.26'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.26'
+    testImplementation('org.assertj:assertj-core:3.22.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform {
+    }
+}
+
+task Custom_task{
+    group "Custom task"
+    description "Gradle Custom task."
+    doLast{
+        println "It is a Custom task Example.";
+        def sout = new StringBuilder(), serr = new StringBuilder()
+        def args = ['cmd', '/c', 'dir']
+        def proc = new ProcessBuilder( args )
+        Process process = proc.start()
+        process.consumeProcessOutput( sout, serr )
+        process.waitForOrKill( 2000 )
+        println sout
+        //"./gradlew clean test -DincludeTags='development' -DexcludeTags='production'".execute()
+    }
+}
+
+task testDevelopment(type: Test) {
+    useJUnitPlatform {
+        excludeTags "development"
+    }
+}
+
+task productionTest(type: Test) {
+    useJUnitPlatform {
+        includeTags 'production'
+        excludeTags 'development'
+    }
+}
+
+tasks.register("production2Tests", Test) {
+    useJUnitPlatform {
+        includeTags "production"
+    }
+    mustRunAfter check
+}
+
+jar {
+    archiveBaseName = 'gs-gradle-junit5'
+    archiveVersion =  '0.1.0'
+}
